@@ -1,5 +1,6 @@
 import argparse
 
+from commands.init_command import init_command
 from commands.install_command import install_command
 from commands.package_command import package_command
 from commands.publish_command import publish_command
@@ -18,6 +19,9 @@ def configure_argparser() -> argparse.ArgumentParser:
 
     publish_parser = subparsers.add_parser('publish')
     publish_parser.set_defaults(handler=publish_command)
+
+    init_parser = subparsers.add_parser('init')
+    init_parser.set_defaults(handler=init_command)
 
     return parser
 
