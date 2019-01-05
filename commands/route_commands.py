@@ -22,6 +22,8 @@ def configure_argparser() -> argparse.ArgumentParser:
 
     init_parser = subparsers.add_parser('init')
     init_parser.set_defaults(handler=init_command)
+    init_parser.add_argument('--name', '-n', type=str, help='name of package')
+    init_parser.add_argument('--version', '-v', type=str, help='version of package in format 1.0.0')
 
     return parser
 
