@@ -16,6 +16,7 @@ def configure_argparser() -> argparse.ArgumentParser:
 
     package_parser = subparsers.add_parser('package')
     package_parser.set_defaults(handler=package_command)
+    package_parser.add_argument('directory', type=str, help='directory containing zpspec.json to package')
 
     publish_parser = subparsers.add_parser('publish')
     publish_parser.set_defaults(handler=publish_command)
