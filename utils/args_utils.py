@@ -1,5 +1,5 @@
 import os
-import sys
+
 
 def get_directory_or_cwd(args):
     if args.directory:

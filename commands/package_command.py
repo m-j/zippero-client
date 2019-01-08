@@ -1,8 +1,8 @@
-import os
+import sys
+import zipfile
+from os import path, walk
 
 import shutil
-import sys
-from os import path
 
 from utils.args_utils import get_directory_or_cwd
 from utils.paths import zpspec_name
@@ -24,7 +24,17 @@ def package_command(args):
 
     archive_path = path.join(directory, fullname(name, version) + '.zip')
 
-    shutil.make_archive(archive_path, 'zip', directory)
+    walk_iterator = walk(directory)
+
+    with zipfile.ZipFile(archive_path, 'w') as zip_file:
+        for root, dirs, files in walk_iterator:
+            for file in files:
+                src_file_path = path.join(root, file)
+
+                if path.samefile(src_file_path, archive_path):
+                    continue
+
+                zip_file.write(src_file_path, arcname=path.relpath(src_file_path, directory))
 
 
 def load_zpsec_or_handle_err(directory):
