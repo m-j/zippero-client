@@ -1,6 +1,7 @@
 import json
 import os
 
+from utils.args_utils import get_directory_or_cwd
 from utils.paths import zpspec_name
 
 
@@ -13,8 +14,11 @@ def init_command(args):
         'version': version
     }
 
-    cwd = os.getcwd()
-    zpspec_path = os.path.join(cwd, zpspec_name)
+    directory = get_directory_or_cwd(args)
+
+    zpspec_path = os.path.join(directory, zpspec_name)
 
     with open(zpspec_path, 'tx') as file:
         json.dump(zpspec_json_dict, file)
+
+    print(f'Created zpspec file under {zpspec_path}')

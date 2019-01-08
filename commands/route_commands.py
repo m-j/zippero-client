@@ -14,17 +14,18 @@ def configure_argparser() -> argparse.ArgumentParser:
     install_parser.set_defaults(handler=install_command)
     install_parser.add_argument('package', type=str, help='name of package or name@version e.g. Package@1.0.1')
 
-    package_parser = subparsers.add_parser('package')
+    package_parser = subparsers.add_parser('package', help='packages cwd containing zpspec.json file')
     package_parser.set_defaults(handler=package_command)
-    package_parser.add_argument('directory', type=str, help='directory containing zpspec.json to package')
+    package_parser.add_argument('--directory', '-d', type=str)
 
     publish_parser = subparsers.add_parser('publish')
     publish_parser.set_defaults(handler=publish_command)
 
     init_parser = subparsers.add_parser('init')
     init_parser.set_defaults(handler=init_command)
-    init_parser.add_argument('--name', '-n', type=str, help='name of package')
-    init_parser.add_argument('--version', '-v', type=str, help='version of package in format 1.0.0')
+    init_parser.add_argument('--name', '-n', type=str, required=True, help='name of package')
+    init_parser.add_argument('--version', '-v', type=str, required=True, help='version of package in format 1.0.0')
+    init_parser.add_argument('--directory', '-d', type=str)
 
     return parser
 

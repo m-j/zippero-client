@@ -1,19 +1,24 @@
+import os
+
 import shutil
 import sys
 from os import path
 
+from utils.args_utils import get_directory_or_cwd
 from utils.paths import zpspec_name
 from utils.zpspec_utils import load_zpspec, fullname
 
 
 def package_command(args):
     print('package command')
-    print(args)
 
-    directory = args.directory
-    zpspec_path = path.join(directory, zpspec_name)
+    directory = get_directory_or_cwd(args)
 
-    zpspec_dict = load_zpsec_or_handle_err(zpspec_path)
+    zpspec_dict = load_zpsec_or_handle_err(directory)
+
+    if zpspec_dict is None:
+        return
+
     name = zpspec_dict['packageName']
     version = zpspec_dict['version']
 
@@ -22,9 +27,11 @@ def package_command(args):
     shutil.make_archive(archive_path, 'zip', directory)
 
 
-def load_zpsec_or_handle_err(zpspec_path):
+def load_zpsec_or_handle_err(directory):
+    zpspec_path = path.join(directory, zpspec_name)
     try:
         return load_zpspec(zpspec_path)
     except OSError as ex:
-        print(f'Directory {directory} does not contain {zpspec_name}', file=sys.stderr)
+        print(f'Cannot read {zpspec_path}', file=sys.stderr)
         raise
+        return None

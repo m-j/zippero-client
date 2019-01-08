@@ -3,7 +3,7 @@ import json
 
 def load_zpspec(zpspec_path: str):
     with open(zpspec_path, 'rt') as file:
-        return json.load(zpspec_path, file)
+        return json.load(file)
 
 
 def fullname(name: str, version: str):
