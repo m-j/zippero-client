@@ -20,3 +20,8 @@ def print_response_error(response: requests.Response):
         print(f'Error {error_code_label} = {error_code}. "{message}"',file=sys.stderr)
     except:
         print(f'Unable to parse response "{response.text}"',file=sys.stderr)
+
+
+def print_response_error_and_exit(response: requests.Response):
+    print_response_error(response)
+    #todo: exit program and return exit code
