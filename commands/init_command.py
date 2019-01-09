@@ -2,7 +2,7 @@ import json
 import os
 
 from utils.args_utils import get_directory_or_cwd
-from utils.paths import zpspec_name
+from utils.constants import zpspec_name
 
 
 def init_command(args):

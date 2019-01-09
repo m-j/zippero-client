@@ -1,4 +1,4 @@
-from commands.route_commands import route_commands
+from commands.router import route_commands
 
 
 def main():

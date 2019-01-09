@@ -5,7 +5,7 @@ from os import path, walk
 import shutil
 
 from utils.args_utils import get_directory_or_cwd
-from utils.paths import zpspec_name
+from utils.constants import zpspec_name
 from utils.zpspec_utils import load_zpspec, fullname
 
 
