@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 import requests
 import os
 
+from error_handling.error_handlers import is_error_response, print_response_error
 from utils.constants import api_key_header, api_key_environment_variable
 
 
@@ -19,6 +20,7 @@ def publish_command(args):
     print(args)
 
     file_path = args.file
+    response = None
 
     with open(file_path, 'rb') as file:
         headers= {}
@@ -30,6 +32,10 @@ def publish_command(args):
         repository= args.repository
 
         packages_url = urljoin(repository, 'packages')
+
         response = requests.post(packages_url, headers=headers, data=file)
 
-        print(response)
+    if is_error_response(response):
+        print_response_error(response)
+    else:
+        print(f'Package {file_path} published')
