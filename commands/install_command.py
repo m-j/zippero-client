@@ -12,6 +12,7 @@ from commands.publish_command import get_api_key
 from error_handling.error_handlers import is_error_response, throw_response_error
 from packages.package_installer import PackageInstaller
 from utils.constants import api_key_header
+from utils.zpspec_utils import fullname
 
 package_version_regex = r'(?P<name>[^@]+)@(?P<version>[\d\.]+)'
 
@@ -28,6 +29,7 @@ def try_extract_version(package: str):
 
 def install_exact_version(requested_name, requested_version, target_path, package_installer: PackageInstaller):
     package_installer.install(requested_name, requested_version, target_path)
+    print(f'Package {fullname(requested_name, requested_version)} installed under {target_path}')
 
 
 def install_newest_version(requested_name, target_path, package_installer, repository, api_key):
@@ -83,13 +85,5 @@ def install_command(args):
         install_exact_version(requested_name, requested_version, target_path, package_installer)
     else:
         install_newest_version(requested_name, target_path, package_installer, repository, api_key)
-
-
-
-
-    # if not requested_version:
-    #     requested_version = versions[-1]
-
-
 
 

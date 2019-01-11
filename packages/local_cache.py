@@ -28,7 +28,7 @@ class LocalCache:
         if not self.zippero_cache_directory.exists():
             self.zippero_cache_directory.mkdir(parents=True)
 
-        packages = [str(p) for p in self.zippero_cache_directory.iterdir() if p.is_file()]
+        packages = [str(p.stem) for p in self.zippero_cache_directory.iterdir() if p.is_file()]
         self.packages = packages
 
     def download_package_if_needed(self, name: str, version: str):
