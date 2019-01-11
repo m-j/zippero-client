@@ -29,7 +29,7 @@ def publish_command(args):
         if api_key is not None:
             headers[api_key_header] = api_key
 
-        repository= args.repository
+        repository = args.repository
 
         packages_url = urljoin(repository, 'packages')
 

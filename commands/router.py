@@ -1,9 +1,11 @@
 import argparse
+import sys
 
 from commands.init_command import init_command
 from commands.install_command import install_command
 from commands.package_command import package_command
 from commands.publish_command import publish_command
+from error_handling.exceptions import ZipperoClientException
 from utils.constants import api_key_environment_variable
 
 
@@ -14,6 +16,8 @@ def configure_argparser() -> argparse.ArgumentParser:
     install_parser = subparsers.add_parser('install')
     install_parser.set_defaults(handler=install_command)
     install_parser.add_argument('package', type=str, help='name of package or name@version e.g. Package@1.0.1')
+    install_parser.add_argument('--repository', '-r', type=str, required=True, help='repository url')
+    install_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
 
     package_parser = subparsers.add_parser('package', help='packages cwd containing zpspec.json file')
     package_parser.set_defaults(handler=package_command)
@@ -39,7 +43,10 @@ def route_commands():
     args = parser.parse_args()
 
     if 'handler' in args:
-        args.handler(args)
+        try:
+            args.handler(args)
+        except ZipperoClientException as ex:
+            print(ex.message, file=sys.stderr)
     else:
         parser.print_help()
 
