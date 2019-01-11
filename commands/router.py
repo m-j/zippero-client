@@ -13,11 +13,12 @@ def configure_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(title='subcommands', description='list of valid subcommands')
 
-    install_parser = subparsers.add_parser('install')
+    install_parser = subparsers.add_parser('install', help='installs given package under given path. directory will be created if doesnt exist')
     install_parser.set_defaults(handler=install_command)
     install_parser.add_argument('package', type=str, help='name of package or name@version e.g. Package@1.0.1')
     install_parser.add_argument('--repository', '-r', type=str, required=True, help='repository url')
     install_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
+    install_parser.add_argument('--directory', '-d', type=str, help='directory into which package will be installed. if not prowided cwd is used')
 
     package_parser = subparsers.add_parser('package', help='packages cwd containing zpspec.json file')
     package_parser.set_defaults(handler=package_command)
