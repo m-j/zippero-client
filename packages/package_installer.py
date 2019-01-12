@@ -6,9 +6,7 @@ from packages.local_cache import LocalCache
 class PackageInstaller:
     cache: LocalCache
 
-    def __init__(self, cache: LocalCache, repository: str, api_key: str):
-        self.api_key = api_key
-        self.repository = repository
+    def __init__(self, cache: LocalCache):
         self.cache = cache
 
     def install(self, requested_name: str, requested_version: str, target_path: str):
