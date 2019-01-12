@@ -15,7 +15,6 @@ class ApiClient:
         self.api_key = api_key
         self.repository_url = repository_url
 
-
     def post_package(self, file: BinaryIO):
         headers = {}
 
