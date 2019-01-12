@@ -5,7 +5,7 @@ from os import path, walk
 import shutil
 
 from utils.args_utils import get_directory_or_cwd
-from utils.constants import zpspec_name
+from utils.constants import zpspec_file_name
 from utils.zpspec_utils import load_zpspec, fullname
 
 
@@ -38,7 +38,7 @@ def package_command(args):
 
 
 def load_zpsec_or_handle_err(directory):
-    zpspec_path = path.join(directory, zpspec_name)
+    zpspec_path = path.join(directory, zpspec_file_name)
     try:
         return load_zpspec(zpspec_path)
     except OSError as ex:
