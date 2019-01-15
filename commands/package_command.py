@@ -44,4 +44,3 @@ def load_zpsec_or_handle_err(directory):
     except OSError as ex:
         print(f'Cannot read {zpspec_path}', file=sys.stderr)
         raise
-        return None
