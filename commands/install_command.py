@@ -7,6 +7,7 @@ from error_handling.exceptions import ZipperoClientException
 from packages.api_client import ApiClient
 from packages.local_cache import LocalCache
 from packages.package_installer import PackageInstaller
+from utils.args_utils import get_directory_or_cwd
 from utils.zpspec_utils import fullname
 
 package_version_regex = r'(?P<name>[^@]+)@(?P<version>[\d\.]+)'
@@ -59,10 +60,7 @@ def install_command(args):
     cache = LocalCache.create_from_user_directory(api_client)
     package_installer = PackageInstaller(cache)
 
-    if 'directory' in args:
-        target_path = args.directory
-    else:
-        target_path = getcwd()
+    target_path = get_directory_or_cwd(args)
 
     if requested_version:
         install_exact_version(requested_name, requested_version, target_path, package_installer)
