@@ -6,6 +6,7 @@ from pathlib import Path
 from commands.publish_command import get_api_key
 from error_handling.exceptions import ZipperoClientException
 from packages.api_client import ApiClient
+from utils.args_utils import get_directory_or_cwd
 from utils.constants import zpspec_file_name
 from utils.zpspec_utils import load_zpspec
 
@@ -19,7 +20,7 @@ def common_format(s: str):
 
 def version_check_command(args):
     name = args.name
-    directory = args.directory
+    directory = get_directory_or_cwd(args)
     repository = args.repository
 
     api_key = get_api_key(args)
