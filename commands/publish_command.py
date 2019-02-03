@@ -18,9 +18,6 @@ def get_api_key(args):
 
 
 def publish_command(args):
-    print('publish command')
-    print(args)
-
     repository = args.repository
     file_path = args.file
     api_key = get_api_key(args)

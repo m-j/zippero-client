@@ -10,8 +10,6 @@ from utils.zpspec_utils import load_zpspec, fullname
 
 
 def package_command(args):
-    print('package command')
-
     directory = get_directory_or_cwd(args)
 
     zpspec_dict = load_zpsec_or_handle_err(directory)

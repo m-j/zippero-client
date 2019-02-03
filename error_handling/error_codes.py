@@ -8,3 +8,5 @@ class ErrorCodes(Enum):
     PACKAGE_DOESNT_EXIST = 3
     MALICIOUS_DATA = 4
     UNAUTHORIZED = 5
+    INVALID_NAME = 6
+    INVALID_VERSION = 7
