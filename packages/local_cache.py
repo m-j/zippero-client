@@ -5,22 +5,21 @@ from urllib.parse import urljoin
 import requests
 
 from error_handling.exceptions import ZipperoClientException
+from packages.api_client import ApiClient
 from utils.constants import zippero_user_directory, api_key_header
 from utils.zpspec_utils import fullname
 
 cache_user_directory_name = 'cache'
-download_chunk_size = 1024*1024
+
 
 class LocalCache:
-    api_key: Optional[str]
-    repository_url: str
+    api_client: ApiClient
     zippero_user_directory: Path
     zippero_cache_directory: Path
     packages: List[str]
 
-    def __init__(self, user_home: Path, repository_url: str, api_key: Optional[str]):
-        self.api_key = api_key
-        self.repository_url = repository_url
+    def __init__(self, user_home: Path, api_client: ApiClient):
+        self.api_client = api_client
         self.zippero_cache_directory = user_home.joinpath(zippero_user_directory)
         self.zippero_cache_directory = self.zippero_cache_directory.joinpath(cache_user_directory_name)
 
@@ -32,29 +31,22 @@ class LocalCache:
         self.packages = packages
 
     def download_package_if_needed(self, name: str, version: str):
-        headers = {}
-
-        if self.api_key is not None:
-            headers[api_key_header] = self.api_key
-
-        package_url = urljoin(self.repository_url, f'packages/{name}/{version}')
-
         full = fullname(name, version)
 
         if full in self.packages:
             return
 
-        response = requests.get(package_url, headers= headers, stream=True)
-
         print('Downloading package to cache...')
+
+        response_chunks = self.api_client.get_package(name, version)
 
         try:
             target_file_path = self.get_cache_path(name, version)
             with open(target_file_path, 'wb') as file:
-                for chunk in response.iter_content(chunk_size=download_chunk_size):
+                for chunk in response_chunks:
                     file.write(chunk)
-        except:
-            raise ZipperoClientException(f'Failed to download file {package_url} and save it in cache under {target_file_path}')
+        except OSError:
+            raise ZipperoClientException(f'Failed to write data to file {target_file_path}')
 
         print(f'Package stored under {target_file_path}')
 
@@ -62,8 +54,8 @@ class LocalCache:
         return str(self.zippero_cache_directory.joinpath(fullname(name, version) + '.zip'))
 
     @staticmethod
-    def create_from_user_directory(repository: str, api_key: Optional[str]):
-        cache = LocalCache(Path.home(), repository, api_key)
+    def create_from_user_directory(api_client: ApiClient):
+        cache = LocalCache(Path.home(), api_client)
         cache.scan()
         return cache
 

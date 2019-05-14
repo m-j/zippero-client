@@ -19,8 +19,11 @@ def throw_response_error(response: requests.Response):
         error_code_label = ErrorCodes(error_code).name
 
         raise ZipperoClientException(f'Error {error_code_label} = {error_code}. "{message}"')
-    except:
-        raise ZipperoClientException(f'Unable to parse response "{response.text}"')
+    except Exception as ex:
+        if not issubclass(type(ex), ZipperoClientException):
+            raise ZipperoClientException(f'Unable to parse response "{response.text}"')
+        else:
+            raise
 
 
 def print_response_error_and_exit(response: requests.Response):

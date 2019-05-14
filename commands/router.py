@@ -5,8 +5,10 @@ from commands.init_command import init_command
 from commands.install_command import install_command
 from commands.package_command import package_command
 from commands.publish_command import publish_command
+from commands.version_check_command import version_check_command
 from error_handling.exceptions import ZipperoClientException
 from utils.constants import api_key_environment_variable
+from commands.version_check_command import up_to_date_string, outdated_string
 
 
 def configure_argparser() -> argparse.ArgumentParser:
@@ -30,11 +32,18 @@ def configure_argparser() -> argparse.ArgumentParser:
     publish_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
     publish_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
 
-    init_parser = subparsers.add_parser('init')
+    init_parser = subparsers.add_parser('init', help='creates new zpspec file')
     init_parser.set_defaults(handler=init_command)
     init_parser.add_argument('--name', '-n', type=str, required=True, help='name of package')
     init_parser.add_argument('--version', '-v', type=str, required=True, help='version of package in format 1.0.0')
     init_parser.add_argument('--directory', '-d', type=str)
+
+    version_check_parser = subparsers.add_parser('version-check', help=f'checks wheter installed package is up to date. returns either {up_to_date_string} or {outdated_string}')
+    version_check_parser.set_defaults(handler=version_check_command)
+    version_check_parser.add_argument('name', type=str, help='name of package')
+    version_check_parser.add_argument('--directory', '-d', type=str, required=False, help='directory where package is installed. if not provided cwd is used')
+    version_check_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
+    version_check_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
 
     return parser
 
