@@ -19,7 +19,6 @@ def common_format(s: str):
 
 
 def version_check_command(args):
-    name = args.name
     directory = get_directory_or_cwd(args)
     repository = args.repository
 
@@ -33,19 +32,18 @@ def version_check_command(args):
     zpspec_version = json_dict['version']
     zpspec_name = json_dict['packageName']
 
-    response_json = api_client.get_package_info(name)
+    response_json = api_client.get_package_info(zpspec_name)
 
     versions = response_json['data']['versions']
 
     if len(versions) == 0:
-        raise ZipperoClientException(f'No versions of {requested_name} found')
+        raise ZipperoClientException(f'No versions of {zpspec_name} found')
 
     versions.sort(key=StrictVersion)
 
     newest_version = versions[-1]
 
-    if common_format(zpspec_name) == common_format(name) \
-            and common_format(zpspec_version) == common_format(newest_version):
+    if common_format(zpspec_version) == common_format(newest_version):
         print(up_to_date_string)
     else:
         print(outdated_string)
