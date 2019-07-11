@@ -29,7 +29,12 @@ def version_check_command(args):
     package_directory = Path(getcwd()) / directory
     zpspec_path = package_directory / zpspec_file_name
 
-    json_dict = load_zpspec(str(zpspec_path))
+    try:
+        json_dict = load_zpspec(str(zpspec_path))
+    except:
+        print(outdated_string)
+        return
+
     zpspec_version = json_dict['version']
     zpspec_name = json_dict['packageName']
 
