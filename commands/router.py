@@ -1,5 +1,6 @@
 import argparse
 import sys
+import traceback
 
 from commands.prefetch_command import prefetch_command
 from commands.init_command import init_command
@@ -63,6 +64,12 @@ def route_commands():
             args.handler(args)
         except ZipperoClientException as ex:
             print(ex.message, file=sys.stderr)
+            sys.exit(1)
+            return
+        except:
+            traceback.print_exc()
+            sys.exit(1)
+            return
     else:
         parser.print_help()
 
