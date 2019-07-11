@@ -7,6 +7,7 @@ from error_handling.exceptions import ZipperoClientException
 from packages.api_client import ApiClient
 from packages.local_cache import LocalCache
 from packages.package_installer import PackageInstaller
+from packages.package_utils import get_newest_package_from_package_info
 from utils.args_utils import get_directory_or_cwd
 from utils.zpspec_utils import fullname
 
@@ -30,16 +31,9 @@ def install_exact_version(requested_name, requested_version, target_path, packag
 def install_newest_version(requested_name, target_path, package_installer, api_client: ApiClient):
     response_json = api_client.get_package_info(requested_name)
 
-    versions = response_json['data']['versions']
+    newest_version = get_newest_package_from_package_info(response_json)
 
-    if len(versions) == 0:
-        raise ZipperoClientException(f'No versions of {requested_name} found')
-
-    versions.sort(key=StrictVersion)
-
-    requested_version = versions[-1]
-
-    install_exact_version(requested_name, requested_version, target_path, package_installer)
+    install_exact_version(requested_name, newest_version, target_path, package_installer)
 
 
 def install_command(args):

@@ -6,6 +6,7 @@ from pathlib import Path
 from commands.publish_command import get_api_key
 from error_handling.exceptions import ZipperoClientException
 from packages.api_client import ApiClient
+from packages.package_utils import get_newest_package_from_package_info
 from utils.args_utils import get_directory_or_cwd
 from utils.constants import zpspec_file_name
 from utils.zpspec_utils import load_zpspec
@@ -34,14 +35,7 @@ def version_check_command(args):
 
     response_json = api_client.get_package_info(zpspec_name)
 
-    versions = response_json['data']['versions']
-
-    if len(versions) == 0:
-        raise ZipperoClientException(f'No versions of {zpspec_name} found')
-
-    versions.sort(key=StrictVersion)
-
-    newest_version = versions[-1]
+    newest_version = get_newest_package_from_package_info(response_json)
 
     if common_format(zpspec_version) == common_format(newest_version):
         print(up_to_date_string)

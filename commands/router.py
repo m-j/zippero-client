@@ -1,6 +1,7 @@
 import argparse
 import sys
 
+from commands.prefetch_command import prefetch_command
 from commands.init_command import init_command
 from commands.install_command import install_command
 from commands.package_command import package_command
@@ -43,6 +44,12 @@ def configure_argparser() -> argparse.ArgumentParser:
     version_check_parser.add_argument('--directory', '-d', type=str, required=False, help='directory where package is installed. if not provided cwd is used')
     version_check_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
     version_check_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
+
+    install_parser = subparsers.add_parser('prefetch', help='prefetches package to local cache')
+    install_parser.set_defaults(handler=prefetch_command)
+    install_parser.add_argument('package', type=str, help='name of package or name@version e.g. Package@1.0.1')
+    install_parser.add_argument('--repository', '-r', type=str, required=True, help='repository url')
+    install_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
 
     return parser
 
