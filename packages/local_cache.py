@@ -1,15 +1,18 @@
+import os
 from pathlib import Path
-from typing import List, Optional
-from urllib.parse import urljoin
-
-import requests
-
+from typing import List
+from os import listdir
+from os.path import isfile, join
+import re
 from error_handling.exceptions import ZipperoClientException
 from packages.api_client import ApiClient
-from utils.constants import zippero_user_directory, api_key_header
+from utils.constants import zippero_user_directory
 from utils.zpspec_utils import fullname
+from distutils.version import StrictVersion
 
 cache_user_directory_name = 'cache'
+package_name_version_match_regular_expression = '^([a-zA-Z0-9_., ]*)@([Z0-9_.]*)(.zip)$'
+max_number_of_packages_versions = 5
 
 
 class LocalCache:
@@ -22,6 +25,31 @@ class LocalCache:
         self.api_client = api_client
         self.zippero_cache_directory = user_home.joinpath(zippero_user_directory)
         self.zippero_cache_directory = self.zippero_cache_directory.joinpath(cache_user_directory_name)
+
+    def _build_packages_versions_dict(self) -> dict[str, List[str]]:
+        result = {}
+        packages = [f for f in listdir(self.zippero_cache_directory) if isfile(join(self.zippero_cache_directory, f))]
+        for file_name in packages:
+            package_name = re.search(package_name_version_match_regular_expression, file_name).group(1)
+            package_version = re.search(package_name_version_match_regular_expression, file_name).group(2)
+            if package_name in result:
+                result[package_name].append(package_version)
+            else:
+                result[package_name] = []
+                result[package_name].append(package_version)
+        return result
+
+    def clean(self):
+        packages_version = self._build_packages_versions_dict()
+        for package in packages_version:
+            versions = packages_version[package]
+            versions.sort(key=StrictVersion)
+            if len(versions) > max_number_of_packages_versions:
+                end_idx = len(versions) - max_number_of_packages_versions
+                for version in reversed(versions[0:end_idx]):
+                    full_path = self.zippero_cache_directory.joinpath(f'{package}@{version}.zip')
+                    print(f'Cleaning obsolete package from cache - {package}@{version}')
+                    os.remove(full_path)
 
     def scan(self):
         if not self.zippero_cache_directory.exists():
@@ -49,6 +77,12 @@ class LocalCache:
             raise ZipperoClientException(f'Failed to write data to file {target_file_path}')
 
         print(f'Package stored under {target_file_path}')
+
+        print(f'Cleaning cache...')
+
+        self.clean()
+
+        print(f'Cleaning cache done!')
 
     def get_cache_path(self, name: str, version: str):
         return str(self.zippero_cache_directory.joinpath(fullname(name, version) + '.zip'))
