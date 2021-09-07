@@ -26,7 +26,7 @@ class LocalCache:
         self.zippero_cache_directory = user_home.joinpath(zippero_user_directory)
         self.zippero_cache_directory = self.zippero_cache_directory.joinpath(cache_user_directory_name)
 
-    def _build_packages_versions_dict(self) -> dict[str, List[str]]:
+    def _build_packages_versions_dict(self):
         result = {}
         packages = [f for f in listdir(self.zippero_cache_directory) if isfile(join(self.zippero_cache_directory, f))]
         for file_name in packages:
