@@ -8,7 +8,7 @@ from error_handling.exceptions import ZipperoClientException
 from packages.api_client import ApiClient
 from utils.constants import zippero_user_directory
 from utils.zpspec_utils import fullname
-from distutils.version import StrictVersion
+from distutils.version import LooseVersion
 
 cache_user_directory_name = 'cache'
 package_name_version_match_regular_expression = '^([a-zA-Z0-9_., ]*)@([Z0-9_.]*)(.zip)$'
@@ -43,7 +43,7 @@ class LocalCache:
         packages_version = self._build_packages_versions_dict()
         for package in packages_version:
             versions = packages_version[package]
-            versions.sort(key=StrictVersion)
+            versions.sort(key=LooseVersion)
             if len(versions) > max_number_of_packages_versions:
                 end_idx = len(versions) - max_number_of_packages_versions
                 for version in reversed(versions[0:end_idx]):

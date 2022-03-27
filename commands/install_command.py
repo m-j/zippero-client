@@ -1,5 +1,5 @@
 import re
-from distutils.version import StrictVersion
+from distutils.version import LooseVersion
 from os import getcwd
 
 from commands.publish_command import get_api_key
