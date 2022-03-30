@@ -11,7 +11,7 @@ from packages.package_utils import get_newest_package_from_package_info
 from utils.args_utils import get_directory_or_cwd
 from utils.zpspec_utils import fullname
 
-package_version_regex = r'(?P<name>[^@]+)@(?P<version>[\d\.]+)'
+package_version_regex = r'(?P<name>[^@]+)@(?P<version>(0|[1-9]\d*)\.(0|[1-9]\d*)\.([0-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)'
 
 
 def try_extract_version(package: str):
