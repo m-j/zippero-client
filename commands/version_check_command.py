@@ -1,5 +1,5 @@
 import json
-from distutils.version import StrictVersion
+from distutils.version import LooseVersion
 from os import getcwd
 from pathlib import Path
 
