@@ -15,7 +15,7 @@ def common_format(s: str):
     return s.strip().lower()
 
 
-def version_check_command(args):
+def package_version_command(args):
     directory = get_directory_or_cwd(args)
     repository = args.repository
 
@@ -31,7 +31,6 @@ def version_check_command(args):
         print('')
         return
 
-    zpspec_version = json_dict['version']
     zpspec_name = json_dict['packageName']
 
     response_json = api_client.get_package_info(zpspec_name)
