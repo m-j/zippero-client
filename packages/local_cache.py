@@ -11,7 +11,7 @@ from utils.zpspec_utils import fullname
 from distutils.version import LooseVersion
 
 cache_user_directory_name = 'cache'
-package_name_version_match_regular_expression = '^([a-zA-Z0-9_., ]*)@([\w0-9_.+-]*)(.zip)$'
+package_name_version_match_regular_expression = '^([a-zA-Z0-9_., ]*)@([a-zA-Z0-9_.+-]*)(.zip)$'
 max_number_of_packages_versions = 5
 
 
@@ -30,8 +30,13 @@ class LocalCache:
         result = {}
         packages = [f for f in listdir(self.zippero_cache_directory) if isfile(join(self.zippero_cache_directory, f))]
         for file_name in packages:
-            package_name = re.search(package_name_version_match_regular_expression, file_name).group(1)
-            package_version = re.search(package_name_version_match_regular_expression, file_name).group(2)
+            name_version = re.search(package_name_version_match_regular_expression, file_name)
+
+            if name_version is None:
+                continue
+
+            package_name = name_version.group(1)
+            package_version = name_version.group(2)
             if package_name in result:
                 result[package_name].append(package_version)
             else:
