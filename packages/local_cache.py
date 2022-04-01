@@ -11,7 +11,7 @@ from utils.zpspec_utils import fullname
 from distutils.version import LooseVersion
 
 cache_user_directory_name = 'cache'
-package_name_version_match_regular_expression = '^([a-zA-Z0-9_., ]*)@([Z0-9_.]*)(.zip)$'
+package_name_version_match_regular_expression = '^([a-zA-Z0-9_., ]*)@([\w0-9_.+-]*)(.zip)$'
 max_number_of_packages_versions = 5
 
 
