@@ -8,6 +8,7 @@ from commands.install_command import install_command
 from commands.package_command import package_command
 from commands.publish_command import publish_command
 from commands.version_check_command import version_check_command
+from commands.package_version_command import package_version_command
 from error_handling.exceptions import ZipperoClientException
 from utils.constants import api_key_environment_variable
 from commands.version_check_command import up_to_date_string, outdated_string
@@ -45,6 +46,12 @@ def configure_argparser() -> argparse.ArgumentParser:
     version_check_parser.add_argument('--directory', '-d', type=str, required=False, help='directory where package is installed. if not provided cwd is used')
     version_check_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
     version_check_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
+
+    package_version_parser = subparsers.add_parser('package-version', help=f'checks package latest version.')
+    package_version_parser.set_defaults(handler=package_version_command)
+    package_version_parser.add_argument('package', type=str, help='name of package')
+    package_version_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
+    package_version_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
 
     install_parser = subparsers.add_parser('prefetch', help='prefetches package to local cache')
     install_parser.set_defaults(handler=prefetch_command)

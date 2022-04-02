@@ -16,6 +16,10 @@ package_version_regex = r'(?P<name>[^@]+)@(?P<version>(0|[1-9]\d*)\.(0|[1-9]\d*)
 
 def try_extract_version(package: str):
     match = re.match(package_version_regex, package)
+
+    if match is None:
+        return None
+
     if match:
         gd = match.groupdict()
         return (gd['name'], gd['version'])
