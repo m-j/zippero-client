@@ -43,15 +43,15 @@ def configure_argparser() -> argparse.ArgumentParser:
 
     version_check_parser = subparsers.add_parser('version-check', help=f'checks wheter installed package is up to date. returns either {up_to_date_string} or {outdated_string}. If zpspec is not present returns {outdated_string}.')
     version_check_parser.set_defaults(handler=version_check_command)
-    install_parser.add_argument('package', type=str, help='name of package')
-    version_check_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
-    version_check_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
-
-    version_check_parser = subparsers.add_parser('package-version', help=f'checks package latest version.')
-    version_check_parser.set_defaults(handler=package_version_command)
     version_check_parser.add_argument('--directory', '-d', type=str, required=False, help='directory where package is installed. if not provided cwd is used')
     version_check_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
     version_check_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
+
+    package_version_parser = subparsers.add_parser('package-version', help=f'checks package latest version.')
+    package_version_parser.set_defaults(handler=package_version_command)
+    package_version_parser.add_argument('package', type=str, help='name of package')
+    package_version_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
+    package_version_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
 
     install_parser = subparsers.add_parser('prefetch', help='prefetches package to local cache')
     install_parser.set_defaults(handler=prefetch_command)
