@@ -16,24 +16,15 @@ def common_format(s: str):
 
 
 def package_version_command(args):
-    directory = get_directory_or_cwd(args)
+    package = args.package
+    print(f'checking latest version for package {package}')
+
     repository = args.repository
 
     api_key = get_api_key(args)
-
     api_client = ApiClient(repository, api_key)
-    package_directory = Path(getcwd()) / directory
-    zpspec_path = package_directory / zpspec_file_name
 
-    try:
-        json_dict = load_zpspec(str(zpspec_path))
-    except:
-        print('')
-        return
-
-    zpspec_name = json_dict['packageName']
-
-    response_json = api_client.get_package_info(zpspec_name)
+    response_json = api_client.get_package_info(package)
 
     newest_version = get_newest_package_from_package_info(response_json)
 

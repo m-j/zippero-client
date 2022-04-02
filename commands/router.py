@@ -43,7 +43,7 @@ def configure_argparser() -> argparse.ArgumentParser:
 
     version_check_parser = subparsers.add_parser('version-check', help=f'checks wheter installed package is up to date. returns either {up_to_date_string} or {outdated_string}. If zpspec is not present returns {outdated_string}.')
     version_check_parser.set_defaults(handler=version_check_command)
-    version_check_parser.add_argument('--directory', '-d', type=str, required=False, help='directory where package is installed. if not provided cwd is used')
+    install_parser.add_argument('package', type=str, help='name of package')
     version_check_parser.add_argument('--repository', '-r', type=str, help='url to target repository')
     version_check_parser.add_argument('--key', '-k', type=str, help=f'api key to use if not provided will use {api_key_environment_variable}')
 
