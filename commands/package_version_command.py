@@ -17,7 +17,6 @@ def common_format(s: str):
 
 def package_version_command(args):
     package = args.package
-    print(f'checking latest version for package {package}')
 
     repository = args.repository
 
