@@ -5,6 +5,7 @@ import os
 
 from error_handling.error_handlers import is_error_response, throw_response_error
 from packages.api_client import ApiClient
+from error_handling.exceptions import ZipperoClientException
 from utils.constants import api_key_header, api_key_environment_variable
 
 
@@ -25,6 +26,12 @@ def publish_command(args):
     api_client = ApiClient(repository, api_key)
 
     with open(file_path, 'rb') as file:
-        api_client.post_package(file)
+        try:
+            api_client.post_package(file)
+        except Exception as ex:
+            if not issubclass(type(ex), ZipperoClientException):
+                raise ZipperoClientException(f'Failed to post package from {file_path}')
+            else:
+                raise ZipperoClientException(f'Failed to post package from {file_path} with message {ex.message}')
 
     print(f'Package {file_path} published')

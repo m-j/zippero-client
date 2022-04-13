@@ -1,12 +1,12 @@
 from commands.publish_command import get_api_key
 from packages.api_client import ApiClient
-from packages.package_utils import get_newest_package_from_package_info
+from packages.package_utils import get_package_versions
 
 def common_format(s: str):
     return s.strip().lower()
 
 
-def package_version_command(args):
+def package_versions_command(args):
     package = args.package
 
     repository = args.repository
@@ -16,6 +16,7 @@ def package_version_command(args):
 
     response_json = api_client.get_package_info(package)
 
-    newest_version = get_newest_package_from_package_info(response_json)
+    versions = get_package_versions(response_json)
 
-    print(common_format(newest_version))
+    for version in versions:
+        print(version)
